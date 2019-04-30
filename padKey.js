@@ -1,12 +1,13 @@
 class padKey{
 
-  constructor(){
+  constructor(key){
+    this.key = key;
     this.synth = new Tone.Synth().toMaster();
   	Tone.Transport.start();
   }
 
-  play(){
-    this.synth.triggerAttack('c4');
+  play(c){
+    this.synth.triggerAttack(c);
   }
 
   stop(){

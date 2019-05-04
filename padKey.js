@@ -7,6 +7,7 @@ class padKey{
   }
 
   play(c){
+    this.name = c;
     this.synth.triggerAttack(c);
   }
 

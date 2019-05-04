@@ -6,3 +6,13 @@ body {
     letter-spacing: 1px;
     font-size: 12px;
 }
+
+#note{
+  font-size: 8px;
+  font-size: 4vw;
+  width: 40vw;
+  height: 80vh;
+  position: absolute;
+  left: 30vw;
+  top: 40vh;
+}

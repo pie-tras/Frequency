@@ -1,58 +1,52 @@
 let counter;
 
-var slider;
+let slider;
 
 var playing = false;
 
-var padKeyboard = "azsxdcfvgbhnjmk,l1q2w3e4r5t6y7u8i9o0p-"
+var padKeyboard = "azsxdcfvgbhnjmk,l.;/1q2w3e4r5t6y7u8i9o0p-[=]"
 var padNotes = "abcdefg"
-var currentOctave = 3;
+var currentOctave = 0;
 var padKeys = [];
 var padNoteArray = [];
+var padOctArray = [];
+
+var noteNames = [];
+
+var createdKeys = false;
 
 function setup(){
-
-	var context = new AudioContext();
-
-	slider = createSlider(0, 50, 1);
+	slider = createSlider(0, 3, 0);
 	slider.position(20, 20);
-
-
-	setup();
-
-	counter = 0;
-}
-
-function setup(){
 	var q = 0;
 	for(var i = 0; i < padKeyboard.length; i++){
 		padKeys.push(new padKey(padKeyboard.charAt(i)));
-		if(q >= padNotes.length-1){
+		if(q >= padNotes.length){
 			q = 0;
 			currentOctave++;
 		}
 		if((i + 1)%2 != 0){
-			padNoteArray.push(padNotes.charAt(q) + '#' + currentOctave);
+			padNoteArray.push(padNotes.charAt(q) + 'b');
 		}else{
-			padNoteArray.push(padNotes.charAt(q) + currentOctave);
+			padNoteArray.push(padNotes.charAt(q));
+			q++;
 		}
-		q++;
+		padOctArray.push(currentOctave);
 	}
+	counter = 0;
 }
 
 function draw(){
-	var last = currentOctave;
-	currentOctave = slider.value();
-	console.log(slider.value());
-	if(currentOctave != last){
-		setup();
-	}
+	document.getElementById("note").innerHTML = noteNames;
 }
 
 function keyPressed() {
 	for(var i = 0; i < padKeyboard.length; i++){
 		if(padKeys[i].key == key){
-			padKeys[i].play(padNoteArray[i]);
+			var oct = padOctArray[i] + slider.value();
+			var str = padNoteArray[i] + oct;
+			padKeys[i].play(str);
+			noteNames.push(padKeys[i].name);
 		}
 	}
 }
@@ -61,6 +55,11 @@ function keyReleased(){
 	for(var i = 0; i < padKeyboard.length; i++){
 		if(padKeys[i].key == key){
 			padKeys[i].stop();
+			for(var q = 0; q < noteNames.length; q++){
+				if(noteNames[q] == padKeys[i].name){
+					noteNames.splice(q, 1);
+				}
+			}
 		}
 	}
 }
